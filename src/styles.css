@@ -142,3 +142,40 @@
     color: var(--color-foreground);
   }
 }
+
+/* Dream Weaver — agent activity glow.
+   Each chip sets `--glow` to its color; the keyframe pulses a soft halo
+   so a swarm of running agents reads as "alive" without overwhelming. */
+@keyframes agent-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--glow, oklch(0.7 0.2 264 / 0.3));
+  }
+  50% {
+    box-shadow: 0 0 0 6px var(--glow, oklch(0.7 0.2 264 / 0));
+  }
+}
+
+.agent-chip-glow {
+  animation: agent-pulse 1.6s ease-in-out infinite;
+}
+
+@layer utilities {
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.02) 2px,
+      rgba(255, 255, 255, 0.02) 3px
+    );
+  }
+  .crt-glow {
+    box-shadow:
+      0 0 0 1px var(--glow, rgba(96, 165, 250, 0.4)),
+      0 0 24px -4px var(--glow, rgba(96, 165, 250, 0.4));
+  }
+  .panel-accent {
+    border-left: 2px solid var(--accent, hsl(var(--border)));
+  }
+}
