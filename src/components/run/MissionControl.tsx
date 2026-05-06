@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Sparkles, Activity } from "lucide-react";
+import { motion } from "framer-motion";
 import type { RunSnapshot } from "@/server/types";
 import { Badge } from "@/components/ui/badge";
 import { AgentPanel } from "./AgentPanel";
@@ -28,8 +30,15 @@ export function MissionControl({
         <main className="min-w-0 overflow-y-auto p-3">
           {snapshot && snapshot.agents.length > 0 ? (
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {snapshot.agents.map((job) => (
-                <AgentPanel key={job.id} job={job} logs={logs[job.agentId] ?? []} />
+              {snapshot.agents.map((job, i) => (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04, type: "spring", stiffness: 200, damping: 22 }}
+                >
+                  <AgentPanel job={job} logs={logs[job.agentId] ?? []} />
+                </motion.div>
               ))}
             </div>
           ) : (
@@ -85,8 +94,14 @@ function jobLabel(snap: RunSnapshot | null): string {
 }
 
 function RunTimer({ createdAt, status }: { createdAt?: number; status?: string }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (status === "done" || status === "error") return;
+    const t = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(t);
+  }, [status]);
   if (!createdAt) return null;
-  const elapsed = Math.max(0, Math.floor((Date.now() - createdAt) / 1000));
+  const elapsed = Math.max(0, Math.floor((now - createdAt) / 1000));
   const frozen = status === "done" || status === "error";
   return (
     <div className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
