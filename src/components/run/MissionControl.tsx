@@ -23,11 +23,11 @@ export function MissionControl({
   return (
     <div className="dark grid h-screen grid-rows-[auto_1fr_auto] bg-[#0a0e17] text-foreground">
       <TopBar runId={runId} snapshot={snapshot} connected={connected} />
-      <div className="grid min-h-0 grid-cols-[208px_1fr_300px]">
-        <aside className="border-r border-border/40 bg-[#0d1320]/60 overflow-hidden">
+      <div className="grid min-h-0 grid-cols-[208px_1fr_300px] overflow-hidden">
+        <aside className="min-h-0 overflow-hidden border-r border-border/40 bg-[#0d1320]/60">
           <FlowRail agents={snapshot?.agents ?? []} status={snapshot?.status} />
         </aside>
-        <main className="min-w-0 overflow-y-auto p-3">
+        <main className="min-h-0 min-w-0 overflow-y-auto p-3">
           {snapshot && snapshot.agents.length > 0 ? (
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
               {snapshot.agents.map((job, i) => (
@@ -47,7 +47,7 @@ export function MissionControl({
             </div>
           )}
         </main>
-        <aside className="border-l border-border/40 bg-[#0d1320]/60">
+        <aside className="min-h-0 overflow-hidden border-l border-border/40 bg-[#0d1320]/60">
           <SourcesTicker agents={snapshot?.agents ?? []} />
         </aside>
       </div>

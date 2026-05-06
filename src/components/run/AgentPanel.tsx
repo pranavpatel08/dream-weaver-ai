@@ -40,7 +40,7 @@ export function AgentPanel({ job, logs }: { job: AgentJob; logs: string[] }) {
           <StatusDot status={job.status} color={meta.color} />
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-1">
+        <div className="mt-2 flex flex-col items-stretch gap-1">
           {job.actorIds.map((aid) => (
             <ActorPill key={aid} actorId={aid} startedAt={job.startedAt} active={running} />
           ))}
