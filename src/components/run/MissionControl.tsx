@@ -3,6 +3,7 @@ import { ArrowLeft, Sparkles, Activity } from "lucide-react";
 import type { RunSnapshot } from "@/server/types";
 import { Badge } from "@/components/ui/badge";
 import { AgentPanel } from "./AgentPanel";
+import { FlowRail } from "./FlowRail";
 import { SourcesTicker } from "./SourcesTicker";
 import { SynthDock } from "./SynthDock";
 
@@ -21,9 +22,8 @@ export function MissionControl({
     <div className="dark grid h-screen grid-rows-[auto_1fr_auto] bg-[#0a0e17] text-foreground">
       <TopBar runId={runId} snapshot={snapshot} connected={connected} />
       <div className="grid min-h-0 grid-cols-[208px_1fr_300px]">
-        <aside className="border-r border-border/40 bg-[#0d1320]/60">
-          {/* Task 6 fills FlowRail here */}
-          <div className="p-3 text-[11px] uppercase tracking-wider text-muted-foreground">Flow</div>
+        <aside className="border-r border-border/40 bg-[#0d1320]/60 overflow-hidden">
+          <FlowRail agents={snapshot?.agents ?? []} status={snapshot?.status} />
         </aside>
         <main className="min-w-0 overflow-y-auto p-3">
           {snapshot && snapshot.agents.length > 0 ? (
