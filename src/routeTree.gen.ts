@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as NewRouteImport } from './routes/new'
+import { Route as DossierRouteImport } from './routes/dossier'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as IndexRouteImport } from './routes/index'
@@ -18,6 +19,11 @@ import { Route as RunsIdRouteImport } from './routes/runs.$id'
 const NewRoute = NewRouteImport.update({
   id: '/new',
   path: '/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DossierRoute = DossierRouteImport.update({
+  id: '/dossier',
+  path: '/dossier',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiscoverRoute = DiscoverRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connect': typeof ConnectRoute
   '/discover': typeof DiscoverRoute
+  '/dossier': typeof DossierRoute
   '/new': typeof NewRoute
   '/runs/$id': typeof RunsIdRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connect': typeof ConnectRoute
   '/discover': typeof DiscoverRoute
+  '/dossier': typeof DossierRoute
   '/new': typeof NewRoute
   '/runs/$id': typeof RunsIdRoute
 }
@@ -60,21 +68,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/connect': typeof ConnectRoute
   '/discover': typeof DiscoverRoute
+  '/dossier': typeof DossierRoute
   '/new': typeof NewRoute
   '/runs/$id': typeof RunsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/connect' | '/discover' | '/new' | '/runs/$id'
+  fullPaths: '/' | '/connect' | '/discover' | '/dossier' | '/new' | '/runs/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/connect' | '/discover' | '/new' | '/runs/$id'
-  id: '__root__' | '/' | '/connect' | '/discover' | '/new' | '/runs/$id'
+  to: '/' | '/connect' | '/discover' | '/dossier' | '/new' | '/runs/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/connect'
+    | '/discover'
+    | '/dossier'
+    | '/new'
+    | '/runs/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConnectRoute: typeof ConnectRoute
   DiscoverRoute: typeof DiscoverRoute
+  DossierRoute: typeof DossierRoute
   NewRoute: typeof NewRoute
   RunsIdRoute: typeof RunsIdRoute
 }
@@ -86,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/new'
       fullPath: '/new'
       preLoaderRoute: typeof NewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dossier': {
+      id: '/dossier'
+      path: '/dossier'
+      fullPath: '/dossier'
+      preLoaderRoute: typeof DossierRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/discover': {
@@ -123,6 +147,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConnectRoute: ConnectRoute,
   DiscoverRoute: DiscoverRoute,
+  DossierRoute: DossierRoute,
   NewRoute: NewRoute,
   RunsIdRoute: RunsIdRoute,
 }
