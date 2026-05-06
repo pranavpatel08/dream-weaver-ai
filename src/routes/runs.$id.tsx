@@ -8,6 +8,6 @@ export const Route = createFileRoute("/runs/$id")({
 
 function RunPage() {
   const { id } = Route.useParams();
-  const { snapshot, connected } = useRunStream(id);
-  return <MissionControl runId={id} snapshot={snapshot} connected={connected} />;
+  const { snapshot, logs, connected } = useRunStream(id);
+  return <MissionControl runId={id} snapshot={snapshot} logs={logs} connected={connected} />;
 }

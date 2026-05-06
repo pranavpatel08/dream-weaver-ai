@@ -2,14 +2,17 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Sparkles, Activity } from "lucide-react";
 import type { RunSnapshot } from "@/server/types";
 import { Badge } from "@/components/ui/badge";
+import { AgentPanel } from "./AgentPanel";
 
 export function MissionControl({
   runId,
   snapshot,
+  logs,
   connected,
 }: {
   runId: string;
   snapshot: RunSnapshot | null;
+  logs: Record<string, string[]>;
   connected: boolean;
 }) {
   return (
@@ -20,9 +23,18 @@ export function MissionControl({
           {/* Task 6 fills FlowRail here */}
           <div className="p-3 text-[11px] uppercase tracking-wider text-muted-foreground">Flow</div>
         </aside>
-        <main className="min-w-0 overflow-y-auto p-4">
-          {/* Task 3 fills agent grid here */}
-          <div className="text-xs text-muted-foreground">Agent grid mounts here</div>
+        <main className="min-w-0 overflow-y-auto p-3">
+          {snapshot && snapshot.agents.length > 0 ? (
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {snapshot.agents.map((job) => (
+                <AgentPanel key={job.id} job={job} logs={logs[job.agentId] ?? []} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
+              Waiting for the coordinator to dispatch agents…
+            </div>
+          )}
         </main>
         <aside className="border-l border-border/40 bg-[#0d1320]/60">
           {/* Task 4 fills SourcesTicker here */}
