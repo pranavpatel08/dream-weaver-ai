@@ -14,16 +14,8 @@ export function AgentPanel({ job, logs }: { job: AgentJob; logs: string[] }) {
   const hidden = Math.max(0, job.cards.length - cardsToShow.length);
 
   return (
-    <div
-      className="panel-accent rounded-lg border border-border/50 bg-[#111827]/80 p-3 transition-shadow"
-      style={
-        {
-          ["--accent" as string]: meta.color,
-          ["--glow" as string]: `${meta.color}55`,
-        } as React.CSSProperties
-      }
-    >
-      <div className={running ? "crt-glow rounded-md" : undefined}>
+    <div className="rounded-lg border border-border/40 bg-[#111827]/70 p-3 transition-colors">
+      <div>
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <div
