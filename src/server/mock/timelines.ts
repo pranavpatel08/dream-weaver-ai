@@ -491,3 +491,208 @@ const verticalAiHealthDiscover: MockScenario = {
 };
 
 SCENARIOS["discover-vertical-ai-health"] = verticalAiHealthDiscover;
+
+const connectAnthropic: MockScenario = {
+  id: "connect-anthropic",
+  job: "connect",
+  prompt: "Anthropic",
+  steps: [
+    {
+      delayMs: 0,
+      kind: "queue",
+      job: makeJob("linkedin-company-scout", "Map Anthropic team + cap-table investors", [
+        "harvestapi/linkedin-company-search",
+      ]),
+    },
+    {
+      delayMs: 50,
+      kind: "queue",
+      job: makeJob("founder-profiler", "Founder reachability + outreach signal", [
+        "apidojo/tweet-scraper",
+      ]),
+    },
+    {
+      delayMs: 100,
+      kind: "queue",
+      job: makeJob("news-scout", "Recent fundraises + investor announcements", [
+        "apify/google-search-scraper",
+      ]),
+    },
+
+    { delayMs: 200, kind: "start", agentId: "linkedin-company-scout" },
+    { delayMs: 250, kind: "start", agentId: "founder-profiler" },
+    { delayMs: 300, kind: "start", agentId: "news-scout" },
+
+    {
+      delayMs: 500,
+      kind: "log",
+      agentId: "linkedin-company-scout",
+      message: "Calling harvestapi/linkedin-company-search · searchQuery='Anthropic'",
+    },
+    {
+      delayMs: 800,
+      kind: "log",
+      agentId: "founder-profiler",
+      message: "Calling apidojo/tweet-scraper · @darioamodei",
+    },
+    {
+      delayMs: 1100,
+      kind: "log",
+      agentId: "news-scout",
+      message: "Calling apify/google-search-scraper · 'Anthropic Series + investors'",
+    },
+
+    {
+      delayMs: 1300,
+      kind: "source",
+      agentId: "linkedin-company-scout",
+      source: {
+        id: "ks1",
+        url: "https://linkedin.com/company/anthropic",
+        title: "Anthropic — 850+ employees",
+        actorId: "harvestapi/linkedin-company-search",
+        agentId: "linkedin-company-scout",
+      },
+    },
+    {
+      delayMs: 1500,
+      kind: "card",
+      agentId: "linkedin-company-scout",
+      card: {
+        id: "kc1",
+        kind: "investor",
+        title: "Spark Capital",
+        subtitle: "Series A lead · 2021",
+        body: "Bijan Sabet's bet; he's no longer at Spark — pivot to Sarah Guo (now Conviction).",
+        agentId: "linkedin-company-scout",
+      },
+    },
+
+    {
+      delayMs: 1800,
+      kind: "source",
+      agentId: "news-scout",
+      source: {
+        id: "ks2",
+        url: "https://techcrunch.com/anthropic-series-c",
+        title: "Anthropic raises $750M",
+        actorId: "apify/google-search-scraper",
+        agentId: "news-scout",
+      },
+    },
+    {
+      delayMs: 2000,
+      kind: "card",
+      agentId: "news-scout",
+      card: {
+        id: "kc2",
+        kind: "funding",
+        title: "Series D — Google + others",
+        subtitle: "$2B+ commitments",
+        body: "Lightspeed, Salesforce Ventures, Menlo, Fidelity follow.",
+        agentId: "news-scout",
+      },
+    },
+
+    {
+      delayMs: 2200,
+      kind: "source",
+      agentId: "founder-profiler",
+      source: {
+        id: "ks3",
+        url: "https://x.com/darioamodei",
+        title: "Dario Amodei on X",
+        actorId: "apidojo/tweet-scraper",
+        agentId: "founder-profiler",
+      },
+    },
+    {
+      delayMs: 2400,
+      kind: "card",
+      agentId: "founder-profiler",
+      card: {
+        id: "kc3",
+        kind: "founder",
+        title: "Dario + Daniela Amodei",
+        subtitle: "ex-OpenAI · Stanford CS PhD network",
+        body: "Cold inbound mostly batch-ignored; warm portfolio routing strongly preferred.",
+        agentId: "founder-profiler",
+      },
+    },
+
+    {
+      delayMs: 2700,
+      kind: "card",
+      agentId: "linkedin-company-scout",
+      card: {
+        id: "kc4",
+        kind: "investor",
+        title: "Cap-table fan-out",
+        subtitle: "Spark, Lightspeed, Salesforce, Google, Menlo, Fidelity",
+        body: "11 named investors total; Spark is the warmest path via Sarah Guo (now Conviction).",
+        agentId: "linkedin-company-scout",
+      },
+    },
+
+    { delayMs: 3000, kind: "finish", agentId: "linkedin-company-scout" },
+    { delayMs: 3100, kind: "finish", agentId: "founder-profiler" },
+    { delayMs: 3200, kind: "finish", agentId: "news-scout" },
+  ],
+  synthesis: {
+    summary: "Three warm paths exist. Start with Sarah at Conviction.",
+    bullets: [
+      "Cap-table: Spark, Lightspeed, Salesforce, Google, Menlo, Fidelity — 11 named investors total.",
+      "Strongest path: Sarah Guo @ Conviction — co-led Anthropic's Series A while at Spark.",
+      "Founder is responsive to deeply technical inbound; signal-heavy outreach > volume.",
+      "Avoid cold founder DM — they batch-ignore; route via portfolio CEO instead.",
+    ],
+    connect: {
+      capTable: [
+        { id: "spark", name: "Spark Capital", kind: "lead", round: "Series A" },
+        { id: "lightspeed", name: "Lightspeed", kind: "lead", round: "Series B" },
+        { id: "salesforce", name: "Salesforce Ventures", kind: "follow", round: "Series C" },
+        { id: "google", name: "Google", kind: "follow", round: "Series D" },
+        { id: "menlo", name: "Menlo Ventures", kind: "follow" },
+        { id: "fidelity", name: "Fidelity", kind: "follow" },
+      ],
+      paths: [
+        {
+          id: "p1",
+          via: "Spark Capital → Sarah Guo (Conviction)",
+          hops: [
+            { name: "Sarah Guo", role: "ex-Spark partner" },
+            { name: "Dario Amodei", role: "CEO Anthropic" },
+          ],
+          strength: 92,
+          rationale: "Sarah co-led Anthropic's Series A while at Spark; warmest hop.",
+        },
+        {
+          id: "p2",
+          via: "Vellum (your portfolio) → Anthropic Solutions Eng",
+          hops: [
+            { name: "Akash Sharma", role: "CEO Vellum" },
+            { name: "Nicholas Joseph", role: "Engineering Lead" },
+          ],
+          strength: 78,
+          rationale: "Vellum is an Anthropic API ecosystem company; reciprocal dependency.",
+        },
+        {
+          id: "p3",
+          via: "Stanford CS PhD network",
+          hops: [{ name: "Chris Olah", role: "Co-founder" }],
+          strength: 64,
+          rationale: "Stanford alumni cluster — slower, less pointed.",
+        },
+        {
+          id: "p4",
+          via: "Cold outreach (signal-heavy)",
+          hops: [],
+          strength: 35,
+          rationale: "Last resort; only with a technical artifact attached.",
+        },
+      ],
+    },
+  },
+};
+
+SCENARIOS["connect-anthropic"] = connectAnthropic;

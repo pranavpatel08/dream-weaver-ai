@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as DiscoverRouteImport } from './routes/discover'
+import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RunsIdRouteImport } from './routes/runs.$id'
 
@@ -22,6 +23,11 @@ const NewRoute = NewRouteImport.update({
 const DiscoverRoute = DiscoverRouteImport.update({
   id: '/discover',
   path: '/discover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectRoute = ConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const RunsIdRoute = RunsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connect': typeof ConnectRoute
   '/discover': typeof DiscoverRoute
   '/new': typeof NewRoute
   '/runs/$id': typeof RunsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connect': typeof ConnectRoute
   '/discover': typeof DiscoverRoute
   '/new': typeof NewRoute
   '/runs/$id': typeof RunsIdRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/connect': typeof ConnectRoute
   '/discover': typeof DiscoverRoute
   '/new': typeof NewRoute
   '/runs/$id': typeof RunsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/discover' | '/new' | '/runs/$id'
+  fullPaths: '/' | '/connect' | '/discover' | '/new' | '/runs/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/discover' | '/new' | '/runs/$id'
-  id: '__root__' | '/' | '/discover' | '/new' | '/runs/$id'
+  to: '/' | '/connect' | '/discover' | '/new' | '/runs/$id'
+  id: '__root__' | '/' | '/connect' | '/discover' | '/new' | '/runs/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConnectRoute: typeof ConnectRoute
   DiscoverRoute: typeof DiscoverRoute
   NewRoute: typeof NewRoute
   RunsIdRoute: typeof RunsIdRoute
@@ -85,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/connect': {
+      id: '/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ConnectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConnectRoute: ConnectRoute,
   DiscoverRoute: DiscoverRoute,
   NewRoute: NewRoute,
   RunsIdRoute: RunsIdRoute,
