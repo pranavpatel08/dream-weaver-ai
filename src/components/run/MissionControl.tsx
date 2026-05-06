@@ -4,6 +4,7 @@ import type { RunSnapshot } from "@/server/types";
 import { Badge } from "@/components/ui/badge";
 import { AgentPanel } from "./AgentPanel";
 import { SourcesTicker } from "./SourcesTicker";
+import { SynthDock } from "./SynthDock";
 
 export function MissionControl({
   runId,
@@ -42,8 +43,7 @@ export function MissionControl({
         </aside>
       </div>
       <footer className="border-t border-border/40 bg-[#0d1320]/80 px-4 py-3">
-        {/* Task 5 fills SynthDock here */}
-        <div className="text-xs text-muted-foreground">Synthesis dock</div>
+        <SynthDock snapshot={snapshot} />
       </footer>
     </div>
   );
