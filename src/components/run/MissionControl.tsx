@@ -3,6 +3,7 @@ import { ArrowLeft, Sparkles, Activity } from "lucide-react";
 import type { RunSnapshot } from "@/server/types";
 import { Badge } from "@/components/ui/badge";
 import { AgentPanel } from "./AgentPanel";
+import { SourcesTicker } from "./SourcesTicker";
 
 export function MissionControl({
   runId,
@@ -37,10 +38,7 @@ export function MissionControl({
           )}
         </main>
         <aside className="border-l border-border/40 bg-[#0d1320]/60">
-          {/* Task 4 fills SourcesTicker here */}
-          <div className="p-3 text-[11px] uppercase tracking-wider text-muted-foreground">
-            Sources
-          </div>
+          <SourcesTicker agents={snapshot?.agents ?? []} />
         </aside>
       </div>
       <footer className="border-t border-border/40 bg-[#0d1320]/80 px-4 py-3">
