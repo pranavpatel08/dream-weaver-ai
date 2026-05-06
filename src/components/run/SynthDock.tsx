@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type { RunSnapshot } from "@/server/types";
 import { DossierDock } from "./jobs/DossierDock";
+import { DiscoverDock } from "./jobs/DiscoverDock";
 
 export function SynthDock({ snapshot }: { snapshot: RunSnapshot | null }) {
   const [expanded, setExpanded] = useState(false);
@@ -25,9 +26,7 @@ export function SynthDock({ snapshot }: { snapshot: RunSnapshot | null }) {
       </div>
       <div className={expanded ? "mt-3 max-h-[40vh] overflow-y-auto" : "mt-2"}>
         {job === "dossier" && <DossierDock synthesis={snapshot?.synthesis} expanded={expanded} />}
-        {job === "discover" && (
-          <div className="text-[11px] text-muted-foreground">Discover dock — Task 7</div>
-        )}
+        {job === "discover" && <DiscoverDock synthesis={snapshot?.synthesis} expanded={expanded} />}
         {job === "connect" && (
           <div className="text-[11px] text-muted-foreground">Connect dock — Task 8</div>
         )}
