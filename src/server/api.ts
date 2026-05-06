@@ -59,19 +59,16 @@ async function handleStart(req: Request): Promise<Response> {
 
   const snap = createRun(prompt, mode, job);
 
-  if (prompt.startsWith("demo:")) {
-    const scenarioId = prompt.slice("demo:".length);
-    const { runMock } = await import("./mock/runner");
-    void runMock(snap.id, scenarioId).catch((err) => {
-      console.error(`[run ${snap.id}] mock runner threw`, err);
-    });
-    return json({ runId: snap.id, snapshot: snap }, 201);
-  }
-
-  // Fire-and-forget. Vite dev keeps the process alive long enough for the
-  // run to complete; on a real Worker this would go in ctx.waitUntil.
-  void runOrchestrator(snap.id, prompt, mode).catch((err) => {
-    console.error(`[run ${snap.id}] orchestrator threw`, err);
+  // Mock-only mode: every run goes through the canned-or-synthesized
+  // timeline replayer. `demo:<id>` prompts pick a polished scenario;
+  // any other prompt gets a fresh synthetic scenario keyed off the
+  // user's input. Real-orchestrator path is intentionally unused for
+  // the demo (kept in src/server/orchestrator.ts for reference).
+  const { runMock } = await import("./mock/runner");
+  const { resolveScenario } = await import("./mock/timelines");
+  const scenario = resolveScenario(prompt, job ?? "dossier");
+  void runMock(snap.id, scenario).catch((err) => {
+    console.error(`[run ${snap.id}] mock runner threw`, err);
   });
 
   return json({ runId: snap.id, snapshot: snap }, 201);

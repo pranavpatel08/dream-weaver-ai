@@ -9,14 +9,9 @@ import {
   setSynthesis,
   startAgent,
 } from "../run-store";
-import { SCENARIOS } from "./timelines";
+import type { MockScenario } from "./timelines";
 
-export async function runMock(runId: string, scenarioId: string) {
-  const scenario = SCENARIOS[scenarioId];
-  if (!scenario) {
-    setRunStatus(runId, "error");
-    return;
-  }
+export async function runMock(runId: string, scenario: MockScenario) {
   setRunStatus(runId, "running");
 
   let last = 0;
