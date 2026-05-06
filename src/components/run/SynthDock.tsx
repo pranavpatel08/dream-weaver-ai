@@ -7,7 +7,7 @@ import { ConnectDock } from "./jobs/ConnectDock";
 
 export function SynthDock({ snapshot }: { snapshot: RunSnapshot | null }) {
   const [expanded, setExpanded] = useState(false);
-  const job = snapshot?.job ?? "dossier";
+  const job = snapshot?.job;
   return (
     <div>
       <div className="flex items-center justify-between gap-3">
