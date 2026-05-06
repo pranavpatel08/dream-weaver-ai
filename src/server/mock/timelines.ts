@@ -341,8 +341,8 @@ const verticalAiHealthDiscover: MockScenario = {
       agentId: "founder-profiler",
       source: {
         id: "ds3",
-        url: "https://x.com/anterior_ceo",
-        title: "Anterior CEO on X",
+        url: "https://x.com/search?q=anterior%20health%20founder&src=typed_query",
+        title: "Anterior founder on X",
         actorId: "apidojo/tweet-scraper",
         agentId: "founder-profiler",
       },
@@ -574,8 +574,8 @@ const connectAnthropic: MockScenario = {
       agentId: "news-scout",
       source: {
         id: "ks2",
-        url: "https://techcrunch.com/anthropic-series-c",
-        title: "Anthropic raises $750M",
+        url: "https://techcrunch.com/?s=anthropic+series",
+        title: "Anthropic Series funding (TechCrunch)",
         actorId: "apify/google-search-scraper",
         agentId: "news-scout",
       },
@@ -879,8 +879,8 @@ function synthDossier(prompt: string): MockScenario {
         agentId: "linkedin-company-scout",
         source: {
           id: `${s}-s2`,
-          url: `https://linkedin.com/company/${s}`,
-          title: `${company} — LinkedIn snapshot`,
+          url: `https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(company)}`,
+          title: `${company} — LinkedIn search`,
           actorId: "harvestapi/linkedin-company-search",
           agentId: "linkedin-company-scout",
         },
@@ -905,7 +905,7 @@ function synthDossier(prompt: string): MockScenario {
         agentId: "founder-profiler",
         source: {
           id: `${s}-s3`,
-          url: `https://x.com/${s}`,
+          url: `https://x.com/search?q=${encodeURIComponent(company + " founder")}&src=typed_query`,
           title: `${company} founder on X`,
           actorId: "apidojo/tweet-scraper",
           agentId: "founder-profiler",
@@ -992,7 +992,7 @@ function synthDiscover(thesis: string): MockScenario {
     discoveryScore: baseScores[i] ?? 65,
     pedigree: peds[i] ?? "ex-AI lab",
     signal: sigs[i] ?? "Hiring sprint detected",
-    url: `https://${n.toLowerCase()}.ai`,
+    url: `https://www.google.com/search?q=${encodeURIComponent(n + " " + themeWord + " startup")}`,
   }));
 
   return {
@@ -1078,7 +1078,7 @@ function synthDiscover(thesis: string): MockScenario {
             agentId,
             source: {
               id: `${s}-src${i}`,
-              url: e.url ?? `https://${e.name.toLowerCase()}.ai`,
+              url: e.url,
               title: `${e.name} — ${e.oneLiner}`,
               actorId,
               agentId,
@@ -1237,8 +1237,8 @@ function synthConnect(prompt: string): MockScenario {
         agentId: "linkedin-company-scout",
         source: {
           id: `${s}-cs1`,
-          url: `https://linkedin.com/company/${s}`,
-          title: `${company} — LinkedIn snapshot`,
+          url: `https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(company)}`,
+          title: `${company} — LinkedIn search`,
           actorId: "harvestapi/linkedin-company-search",
           agentId: "linkedin-company-scout",
         },
@@ -1287,7 +1287,7 @@ function synthConnect(prompt: string): MockScenario {
         agentId: "founder-profiler",
         source: {
           id: `${s}-cs3`,
-          url: `https://x.com/${s}`,
+          url: `https://x.com/search?q=${encodeURIComponent(company + " founder")}&src=typed_query`,
           title: `${company} founder on X`,
           actorId: "apidojo/tweet-scraper",
           agentId: "founder-profiler",
